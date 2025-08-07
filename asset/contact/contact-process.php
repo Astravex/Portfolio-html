@@ -2,7 +2,7 @@
 
 // define("WEBMASTER_EMAIL", 'wordpressriver@gmail.com');
 //$address = "example@themeforest.net";
-$address = "wordpressriver@gmail.com";
+$address = "pierrele0102@gmail.com";
 if (!defined("PHP_EOL")) define("PHP_EOL", "\r\n");
 
 $error = false;
