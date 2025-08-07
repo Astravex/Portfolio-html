@@ -1,54 +1,79 @@
 <?php
 
-// define("WEBMASTER_EMAIL", 'wordpressriver@gmail.com');
-//$address = "example@themeforest.net";
+// Email configuration
 $address = "pierrele0102@gmail.com";
 if (!defined("PHP_EOL")) define("PHP_EOL", "\r\n");
 
-$error = false;
-$fields = array('mail','phone','message' );
-
-foreach ( $fields as $field ) {
-	if ( empty($_POST[$field]) || trim($_POST[$field]) == '' )
-		$error = true;
+// Security: Check if it's a POST request
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo 'ERROR!';
+    exit;
 }
 
-if ( !$error ) {
+$error = false;
+$fields = array('mail', 'phone', 'message');
 
-	$mail = stripslashes($_POST['mail']);	
-	$phone = stripslashes($_POST['phone']);
-	$message = stripslashes($_POST['message']);
+// Validate required fields
+foreach ($fields as $field) {
+    if (empty($_POST[$field]) || trim($_POST[$field]) == '') {
+        $error = true;
+    }
+}
 
-	$e_subject = 'You\'ve been contacted by ' . $email . '.';
-	
+// Additional validation
+if (!$error) {
+    $mail = trim($_POST['mail']);
+    $phone = trim($_POST['phone']);
+    $message = trim($_POST['message']);
+    
+    // Validate email format
+    if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+        $error = true;
+    }
+    
+    // Basic spam protection - check message length
+    if (strlen($message) < 10 || strlen($message) > 2000) {
+        $error = true;
+    }
+    
+    // Basic spam protection - check phone length
+    if (strlen($phone) < 5 || strlen($phone) > 20) {
+        $error = true;
+    }
+}
 
-	// Configuration option.
-	// You can change this if you feel that you need to.
-	// Developers, you may wish to add more fields to the form, in which case you must be sure to add them here.
+if (!$error) {
+    // Sanitize form data
+    $mail = stripslashes($mail);
+    $phone = stripslashes($phone);
+    $message = stripslashes($message);
 
-	$e_body = "You have been contacted by: $email" . PHP_EOL . PHP_EOL;
-	$e_phone = "\r\nPhone: $phone" . PHP_EOL . PHP_EOL;
+    // Email subject
+    $e_subject = 'New Contact Form Submission from ' . $mail;
 
-	$msg = wordwrap( $e_body  , 70 );
+    // Email body
+    $e_body = "You have been contacted by: $mail" . PHP_EOL . PHP_EOL;
+    $e_body .= "Phone: $phone" . PHP_EOL . PHP_EOL;
+    $e_body .= "Message:" . PHP_EOL . $message . PHP_EOL . PHP_EOL;
+    $e_body .= "This email was sent from your portfolio contact form.";
 
-	$headers .= "Mail: $mail" . PHP_EOL;
-	$headers .= "Phone: $phone" . PHP_EOL;
-	$headers .= "Message: $message" . PHP_EOL;
-	// $headers .= "Content-type: text/plain; charset=utf-8" . PHP_EOL;
-	// $headers .= "Content-Transfer-Encoding: quoted-printable" . PHP_EOL;
+    // Email headers
+    $headers = "From: $mail" . PHP_EOL;
+    $headers .= "Reply-To: $mail" . PHP_EOL;
+    $headers .= "Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
+    $headers .= "X-Mailer: PHP/" . phpversion();
 
-	if(mail($address, $msg, $headers  )) {
-
-		// Email has sent successfully, echo a success page.
-	
-		echo 'Success';
-
-	} else {
-
-		echo 'ERROR!';
-
-	}
-
+    // Send email
+    if (mail($address, $e_subject, $e_body, $headers)) {
+        // Email sent successfully
+        echo 'Success';
+    } else {
+        // Email failed to send
+        echo 'ERROR!';
+    }
+} else {
+    // Validation failed
+    echo 'ERROR!';
 }
 
 ?>

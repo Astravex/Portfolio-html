@@ -399,11 +399,76 @@
     });
   };
 
+  // Theme feedback function
+  var showThemeFeedback = function (message) {
+    // Remove existing feedback
+    $(".theme-switch-feedback").remove();
+    
+    // Create new feedback element
+    var feedback = $('<div class="theme-switch-feedback">' + message + '</div>');
+    $("body").append(feedback);
+    
+    // Show feedback
+    setTimeout(function() {
+      feedback.addClass("show");
+    }, 100);
+    
+    // Hide feedback after 2 seconds
+    setTimeout(function() {
+      feedback.removeClass("show");
+      setTimeout(function() {
+        feedback.remove();
+      }, 300);
+    }, 2000);
+  };
+
   // settings_color
   var settings_color = function () {
+    // Load saved color preference on page load
+    var savedColor = localStorage.getItem('portfolio-color-theme');
+    if (savedColor) {
+      $("body").attr("data-color-primary", savedColor);
+      $(".settings-color a").removeClass("active");
+      $(".settings-color a[data-color='" + savedColor + "']").addClass("active");
+    }
+    
+    // Handle color theme clicks
     $(".settings-color a").on("click", function () {
-      var index = $(this).index() + 1;
-      $("body").attr("data-color-primary", "color-primary-" + index);
+      var colorTheme = $(this).data("color");
+      
+      // Update body attribute
+      $("body").attr("data-color-primary", colorTheme);
+      
+      // Save to localStorage
+      localStorage.setItem('portfolio-color-theme', colorTheme);
+      
+      // Update active state
+      $(".settings-color a").removeClass("active");
+      $(this).addClass("active");
+      
+      // Show feedback
+      showThemeFeedback("Color theme updated!");
+    });
+    
+    // Handle theme switching (3D shapes)
+    $(".settings-themes a").on("click", function (e) {
+      e.preventDefault();
+      var href = $(this).attr("href");
+      var themeName = $(this).text().trim();
+      
+      // Save current color preference before navigating
+      var currentColor = $("body").attr("data-color-primary");
+      if (currentColor) {
+        localStorage.setItem('portfolio-color-theme', currentColor);
+      }
+      
+      // Show feedback
+      showThemeFeedback("Switching to " + themeName + " theme...");
+      
+      // Navigate to the new theme page after a short delay
+      setTimeout(function() {
+        window.location.href = href;
+      }, 500);
     });
   };
 
