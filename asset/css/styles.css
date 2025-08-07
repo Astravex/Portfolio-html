@@ -1,8 +1,8 @@
 /* ---------------------------------------------------------
-    * Name: Jayden - Portfolio HTML Template
+    * Name: Pierre Le - Portfolio HTML Template
     * Version: 1.0.0
-    * Author: WordPressRiver
-    * Author URI: https://themeforest.net/user/wordpressriver
+    * Author: Pierre Le
+    * Author URI: https://github.com/cosmic-D
 
 	* Abstracts variable
 
@@ -25,6 +25,50 @@
   --gradient4: linear-gradient(213.44deg, #000000 43.78%, #BA4811 124.39%);
   --gradient5: linear-gradient(150deg, #000000 29.69%, #FB8F10 51.45%, #FE0101 82.71%);
   --gradient6: linear-gradient(125.1deg, #232323 28.16%, #A23F1E 120.37%);
+}
+
+/* Enhanced theme transitions */
+body {
+  transition: all 0.3s ease-in-out;
+}
+
+body[data-color-primary] * {
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+/* Improved color swatch interactions */
+.settings-color a {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.settings-color a:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.settings-color a.active {
+  transform: scale(1.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Theme switching feedback */
+.theme-switch-feedback {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease-in-out;
+}
+
+.theme-switch-feedback.show {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /*---------- Reset css styles ----------- */
