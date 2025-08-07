@@ -154,20 +154,25 @@
     $("#form-contact").each(function () {
       $(this).validate({
         submitHandler: function (form) {
-          var $form = $(form),
-            str = $form.serialize(),
-            loading = $("<div />", { class: "loading" });
+          var $form = $(form);
+          var formData = {
+            mail: $form.find('#mail').val(),
+            phone: $form.find('#phone').val(),
+            message: $form.find('#message').val()
+          };
+          var loading = $("<div />", { class: "loading" });
 
           $.ajax({
             type: "POST",
-            url: $form.attr("action"),
-            data: str,
+            url: "/api/contact",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
             beforeSend: function () {
               $form.find(".send-wrap").append(loading);
             },
-            success: function (msg) {
+            success: function (response) {
               var result, cls;
-              if (msg === "Success") {
+              if (response.message === "Success") {
                 result = "Message Sent Successfully To Email Administrator";
                 cls = "msg-success";
               } else {
@@ -187,6 +192,31 @@
               );
 
               $form.find(":input").not(".submit").val("");
+            },
+            error: function (xhr, status, error) {
+              var result = "Error sending email.";
+              var cls = "msg-error";
+              
+              // Try to get error message from response
+              try {
+                var errorResponse = JSON.parse(xhr.responseText);
+                if (errorResponse.error) {
+                  result = errorResponse.error;
+                }
+              } catch (e) {
+                // Use default error message
+              }
+
+              $form.prepend(
+                $("<div />", {
+                  class: "flat-alert " + cls,
+                  text: result,
+                }).append(
+                  $(
+                    '<a class="close d-flex" href="#"><i class="icon icon-times-solid"></i></a>'
+                  )
+                )
+              );
             },
             complete: function (xhr, status, error_thrown) {
               $form.find(".loading").remove();
