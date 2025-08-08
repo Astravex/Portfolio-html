@@ -71,6 +71,98 @@ body[data-color-primary] * {
   transform: translateX(0);
 }
 
+/* Contact Form Popup Notifications */
+.contact-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.contact-popup.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.contact-popup.success {
+  border-left: 4px solid #28a745;
+}
+
+.contact-popup.error {
+  border-left: 4px solid #dc3545;
+}
+
+.contact-popup-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.contact-popup.success .contact-popup-icon {
+  color: #28a745;
+}
+
+.contact-popup.error .contact-popup-icon {
+  color: #dc3545;
+}
+
+.contact-popup-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.contact-popup-message {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.contact-popup-close {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.contact-popup-close:hover {
+  background: #0056b3;
+}
+
+.contact-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.contact-popup-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
 /*---------- Reset css styles ----------- */
 /* Reset Browsers
 -------------------------------------------------------------- */
@@ -829,7 +921,7 @@ a {
   overflow: hidden;
 }
 .tf-footer.style-1 {
-  padding: 171px 0 214px;
+  padding: 101px 0 124px;
 }
 .tf-footer.style-2 {
   padding: 76px 0 88px;
@@ -4261,7 +4353,7 @@ header .mobile-menu {
     margin: 0 !important;
   }
   .tf-footer.style-1 {
-    padding: 100px 0 170px;
+    padding: 40px 0 100px;
   }
 }
 @media (max-width: 991px) {
@@ -4535,7 +4627,7 @@ header .mobile-menu {
     padding: 40px 0;
   }
   .tf-footer.style-1 {
-    padding: 70px 0 100px;
+    padding: 20px 0 60px;
   }
   .tf-footer .map {
     height: 230px;
