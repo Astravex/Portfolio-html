@@ -29,31 +29,71 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Phone number must be between 5 and 20 characters' });
     }
 
-    // Option 1: Use EmailJS (recommended for Vercel)
-    // You'll need to set up EmailJS account and get your service ID, template ID, and user ID
-    const emailjsResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        service_id: process.env.EMAILJS_SERVICE_ID,
-        template_id: process.env.EMAILJS_TEMPLATE_ID,
-        user_id: process.env.EMAILJS_USER_ID,
-        template_params: {
-          from_email: mail,
-          from_phone: phone,
-          message: message,
-          to_email: 'pierrele0102@gmail.com'
-        }
-      })
-    });
+    // Check if EmailJS environment variables are set
+    const emailjsServiceId = "service_zvq676a";
+    const emailjsTemplateId = "template_kvz0w1l";
+    const emailjsUserId = "a_Hk7hZC215NevhRM";
 
-    if (emailjsResponse.ok) {
-      return res.status(200).json({ message: 'Success' });
+    if (emailjsServiceId && emailjsTemplateId && emailjsUserId) {
+      // Use EmailJS
+      const emailjsResponse = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          service_id: emailjsServiceId,
+          template_id: emailjsTemplateId,
+          user_id: emailjsUserId,
+          template_params: {
+            from_email: mail,
+            from_phone: phone,
+            message: message,
+            to_email: 'pierrele0102@gmail.com'
+          }
+        })
+      });
+
+      if (emailjsResponse.ok) {
+        return res.status(200).json({ message: 'Success' });
+      } else {
+        console.error('EmailJS error:', await emailjsResponse.text());
+        return res.status(500).json({ error: 'Failed to send email via EmailJS' });
+      }
     } else {
-      console.error('EmailJS error:', await emailjsResponse.text());
-      return res.status(500).json({ error: 'Failed to send email' });
+      // Check if Formspree endpoint is set
+      const formspreeEndpoint = process.env.FORMSPREE_ENDPOINT;
+      
+      if (formspreeEndpoint && formspreeEndpoint !== 'https://formspree.io/f/YOUR_FORM_ID') {
+        // Use Formspree
+        const formspreeResponse = await fetch(formspreeEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: mail,
+            phone: phone,
+            message: message,
+            _subject: `New Contact Form Submission from ${mail}`,
+            _replyto: mail
+          })
+        });
+
+        if (formspreeResponse.ok) {
+          return res.status(200).json({ message: 'Success' });
+        } else {
+          console.error('Formspree error:', await formspreeResponse.text());
+          return res.status(500).json({ error: 'Failed to send email via Formspree' });
+        }
+      } else {
+        // No email service configured
+        console.error('No email service configured. Please set up EmailJS or Formspree environment variables.');
+        return res.status(500).json({ 
+          error: 'Email service not configured. Please check the deployment guide for setup instructions.',
+          setup_required: true
+        });
+      }
     }
 
   } catch (error) {
