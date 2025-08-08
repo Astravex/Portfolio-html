@@ -829,7 +829,7 @@ a {
   overflow: hidden;
 }
 .tf-footer.style-1 {
-  padding: 171px 0 214px;
+  padding: 101px 0 124px;
 }
 .tf-footer.style-2 {
   padding: 76px 0 88px;
@@ -4261,7 +4261,7 @@ header .mobile-menu {
     margin: 0 !important;
   }
   .tf-footer.style-1 {
-    padding: 100px 0 170px;
+    padding: 40px 0 100px;
   }
 }
 @media (max-width: 991px) {
@@ -4535,7 +4535,7 @@ header .mobile-menu {
     padding: 40px 0;
   }
   .tf-footer.style-1 {
-    padding: 70px 0 100px;
+    padding: 20px 0 60px;
   }
   .tf-footer .map {
     height: 230px;
