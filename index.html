@@ -11,6 +11,7 @@
       ]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"
     /><![endif]-->
     <title>Pierre Le - Portfolio</title>
+
     <meta name="description" content="Jayden" />
 
     <meta name="keywords" content="" />
@@ -21,35 +22,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
-    ></script>
-    <script type="text/javascript">
-      (function () {
-        emailjs.init({
-          publicKey: "a_Hk7hZC215NevhRM",
-        });
-      })();
-    </script>
-    <script type="text/javascript">
-      window.onload = function () {
-        document
-          .getElementById("contact-form")
-          .addEventListener("submit", function (event) {
-            event.preventDefault();
-            // these IDs from the previous steps
-            emailjs.sendForm("service_zvq676a", "template_kvz0w1l", this).then(
-              () => {
-                console.log("SUCCESS!");
-              },
-              (error) => {
-                console.log("FAILED...", error);
-              }
-            );
-          });
-      };
-    </script>
+
     <!-- Bootstrap  -->
     <link rel="stylesheet" type="text/css" href="asset/css/bootstrap.css" />
     <link
@@ -91,7 +64,12 @@
       rel="apple-touch-icon-precomposed"
       href="asset/images/logo/favicon.png"
     />
-  </head>
+    
+    <!-- EmailJS and Contact Form Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="asset/js/contact-form.js"></script>
+  
+</head>
 
   <body class="counter-scroll">
     <!-- Start Wrapper -->
